@@ -1,0 +1,11 @@
+install this in grafana: https://grafana.com/plugins/grafana-simple-json-datasource/installation
+https://github.com/grafana/simple-json-datasource
+
+install & run this for node js source on :3333
+https://github.com/bergquist/fake-simple-json-datasource
+
+run grafana_datasource.py for source on :3003
+
+
+
+
