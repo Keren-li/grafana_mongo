@@ -190,7 +190,7 @@ def query_metrics():
 
         req_type = target.get('type', 'timeserie')
 
-        finder, target = target['target'].split('~', 1)
+        finder, target = target['target'].split('=', 1)
         print "D", finder, target, ts_range
         query_results = metric_readers[finder](target, ts_range)
 
