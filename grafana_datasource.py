@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 
 import pandas as pd
 import numpy as np
+import pytz
 
 app = Flask(__name__)
 
@@ -255,11 +256,11 @@ if __name__ == '__main__':
         return r
     add_reader('sine_wave', get_sine)
 
-    def get_mq(freq, ts_range):
-        freq = int(freq)
-        ts = pd.date_range(ts_range['$gt'], ts_range['$lte'], freq='H')
-        r = pd.Series(np.sin(np.arange(len(ts)) * np.pi * freq * 2 / float(len(ts))), index=ts).to_frame('value')
-        print "get_sine returns:---------------", r.shape
+    def get_mq(query, ts_range):
+        print "query:", query
+        ts=[pd.datetime(2017,6,1,tzinfo=pytz.utc),pd.datetime(2017,6,10,tzinfo=pytz.utc),pd.datetime(2017,7,1,tzinfo=pytz.utc)]
+        r = pd.Series([1,4,8.1], index=ts).to_frame('value')
+        print "get_mongo_query returns:---------------", r.shape
         print r 
         print "================================"
         return r
