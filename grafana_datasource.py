@@ -248,8 +248,22 @@ if __name__ == '__main__':
     def get_sine(freq, ts_range):
         freq = int(freq)
         ts = pd.date_range(ts_range['$gt'], ts_range['$lte'], freq='H')
-        return pd.Series(np.sin(np.arange(len(ts)) * np.pi * freq * 2 / float(len(ts))), index=ts).to_frame('value')
+        r = pd.Series(np.sin(np.arange(len(ts)) * np.pi * freq * 2 / float(len(ts))), index=ts).to_frame('value')
+        print "get_sine returns:---------------", r.shape
+        print r 
+        print "================================"
+        return r
     add_reader('sine_wave', get_sine)
+
+    def get_mq(freq, ts_range):
+        freq = int(freq)
+        ts = pd.date_range(ts_range['$gt'], ts_range['$lte'], freq='H')
+        r = pd.Series(np.sin(np.arange(len(ts)) * np.pi * freq * 2 / float(len(ts))), index=ts).to_frame('value')
+        print "get_sine returns:---------------", r.shape
+        print r 
+        print "================================"
+        return r
+    add_reader('mongo_query', get_mq)
 
     # To query the wanted reader, use `<reader_name>:<query_string>`, e.g. 'sine_wave:24' 
 
