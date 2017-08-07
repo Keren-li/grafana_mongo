@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 import pandas as pd
 import numpy as np
 import pytz
+import pymongo
 
 app = Flask(__name__)
 
@@ -244,6 +245,8 @@ def get_panel():
 
 
 if __name__ == '__main__':
+    con=pymongo.MongoClient()
+    print con.test.foo.find_one()
 #     Sample annotation reader : add_annotation_reader('midnights', lambda query_string, ts_range: pd.Series(index=pd.date_range(ts_range['$gt'], ts_range['$lte'], freq='D', normalize=True)).fillna('Text for annotation - midnight'))
 #     Sample timeseries reader : 
     def get_sine(freq, ts_range):
@@ -258,8 +261,13 @@ if __name__ == '__main__':
 
     def get_mq(query, ts_range):
         print "query:", query
-        ts=[pd.datetime(2017,6,1,tzinfo=pytz.utc),pd.datetime(2017,6,10,tzinfo=pytz.utc),pd.datetime(2017,7,1,tzinfo=pytz.utc)]
-        r = pd.Series([1,4,8.1], index=ts).to_frame('value')
+        q=con.test[query].find().sort('time')
+        times=[]
+        values=[]
+        for row in q:
+            times.append(row['time'].replace(tzinfo=pytz.utc))
+            values.append(row['val'])
+        r = pd.Series(values, index=times).to_frame('value')
         print "get_mongo_query returns:---------------", r.shape
         print r 
         print "================================"
