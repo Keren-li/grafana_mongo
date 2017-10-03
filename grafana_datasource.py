@@ -271,11 +271,12 @@ if __name__ == '__main__':
         print "url:", url
         print "database:", db
         print "collection:", col
+        query = json.loads(query)
         print "query:", query
         con=pymongo.MongoClient(url)
         print "mongo connection:", con
         print "connection test (will throw exc if bad):", con.test.foo.count()
-        q=con[db][col].find().sort('time')
+        q=con[db][col].find(query).sort('time')
         times=[]
         values=[]
         for row in q:

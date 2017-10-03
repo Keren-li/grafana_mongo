@@ -1,3 +1,5 @@
+query syntax: mongo_query=mongodb://127.0.0.1;test;testpy;{"val":{"$lt":250}}
+
 install this in grafana: https://grafana.com/plugins/grafana-simple-json-datasource/installation
 https://github.com/grafana/simple-json-datasource
 
