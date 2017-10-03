@@ -170,9 +170,9 @@ def _series_to_response(df, target):
 @app.route('/query', methods=methods)
 @cross_origin(max_age=600)
 def query_metrics():
-    print "A"
+#     print "A"
     print request.headers, request.get_json()
-    print "B"
+#     print "B"
     req = request.get_json()
 
     results = []
@@ -186,14 +186,14 @@ def query_metrics():
         freq = None
 
     for target in req['targets']:
-        print "C", target
+#         print "C", target
 #         if ':' not in target.get('target', ''):
 #             abort(404, Exception('Target must be of type: <finder>:<metric_query>, got instead: ' + target['target']))
 
         req_type = target.get('type', 'timeserie')
 
         finder, target = target['target'].split('=', 1)
-        print "D", finder, target, ts_range
+#         print "D", finder, target, ts_range
         query_results = metric_readers[finder](target, ts_range)
 
         if req_type == 'table':
@@ -245,8 +245,6 @@ def get_panel():
 
 
 if __name__ == '__main__':
-    con=pymongo.MongoClient()
-    print con.test.foo.find_one()
 #     Sample annotation reader : add_annotation_reader('midnights', lambda query_string, ts_range: pd.Series(index=pd.date_range(ts_range['$gt'], ts_range['$lte'], freq='D', normalize=True)).fillna('Text for annotation - midnight'))
 #     Sample timeseries reader : 
     def get_sine(freq, ts_range):
@@ -260,6 +258,9 @@ if __name__ == '__main__':
     add_reader('sine_wave', get_sine)
 
     def get_mq(query, ts_range):
+        con=pymongo.MongoClient()
+        print "mongo connection:", con
+        print "connection test (will throw exc if bad):", con.test.foo.count()
         print "query:", query
         q=con.test[query].find().sort('time')
         times=[]
