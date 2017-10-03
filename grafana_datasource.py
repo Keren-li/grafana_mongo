@@ -38,13 +38,17 @@ def add_panel_reader(name, reader):
 @app.route('/', methods=methods)
 @cross_origin()
 def hello_world():
+    print "++++++++++++++++++++++++++++++++"
     print request.headers, request.get_json()
+    print "++++++++++++++++++++++++++++++++"
     return 'Jether\'s python Grafana datasource, used for rendering HTML panels and timeseries data.'
 
 @app.route('/search', methods=methods)
 @cross_origin()
 def find_metrics():
-    print request.headers, request.get_json()
+    print "++++++++++++++++++++++++++++++++"
+    print "headers:", request.headers, request.get_json()
+    print "++++++++++++++++++++++++++++++++"
     req = request.get_json()
 
     target = req.get('target', '*')
@@ -170,9 +174,9 @@ def _series_to_response(df, target):
 @app.route('/query', methods=methods)
 @cross_origin(max_age=600)
 def query_metrics():
-#     print "A"
+    print "++++++++++++++++++++++++++++++++"
     print request.headers, request.get_json()
-#     print "B"
+    print "++++++++++++++++++++++++++++++++"
     req = request.get_json()
 
     results = []
@@ -207,7 +211,9 @@ def query_metrics():
 @app.route('/annotations', methods=methods)
 @cross_origin(max_age=600)
 def query_annotations():
+    print "++++++++++++++++++++++++++++++++"
     print request.headers, request.get_json()
+    print "++++++++++++++++++++++++++++++++"
     req = request.get_json()
 
     results = []
@@ -229,7 +235,9 @@ def query_annotations():
 @app.route('/panels', methods=methods)
 @cross_origin()
 def get_panel():
+    print "++++++++++++++++++++++++++++++++"
     print request.headers, request.get_json()
+    print "++++++++++++++++++++++++++++++++"
     req = request.args
 
     ts_range = {'$gt': pd.Timestamp(int(req['from']), unit='ms').to_pydatetime(),
@@ -258,10 +266,14 @@ if __name__ == '__main__':
     add_reader('sine_wave', get_sine)
 
     def get_mq(query, ts_range):
-        con=pymongo.MongoClient()
+        mdb = ""
+        if ";" in query:
+            mdb, query = query.split(";")
+        con=pymongo.MongoClient(mdb)
+        print "connection:", mdb
+        print "query:", query
         print "mongo connection:", con
         print "connection test (will throw exc if bad):", con.test.foo.count()
-        print "query:", query
         q=con.test[query].find().sort('time')
         times=[]
         values=[]
