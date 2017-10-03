@@ -266,15 +266,16 @@ if __name__ == '__main__':
     add_reader('sine_wave', get_sine)
 
     def get_mq(query, ts_range):
-        mdb = ""
-        if ";" in query:
-            mdb, query = query.split(";")
-        con=pymongo.MongoClient(mdb)
-        print "connection:", mdb
+        #mdb,db,col,q
+        url, db, col, query = query.split(";")
+        print "url:", url
+        print "database:", db
+        print "collection:", col
         print "query:", query
+        con=pymongo.MongoClient(url)
         print "mongo connection:", con
         print "connection test (will throw exc if bad):", con.test.foo.count()
-        q=con.test[query].find().sort('time')
+        q=con[db][col].find().sort('time')
         times=[]
         values=[]
         for row in q:
